@@ -51,7 +51,22 @@ public class CreateUserTest : BaseIntegrationTest
     [Fact]
     public async Task CreateUser_WithDistinctEmail_ShouldResponseBadRequest()
     {
+        // Arrange
+        var request = new CreateUserRequestDto(
+            Faker.Person.FullName,
+            Faker.Internet.Email(),
+            Faker.Internet.Password());
         
+        // Act
+        await HttpClient.PostAsJsonAsync("/api/v1/users", request);
+        var response = await HttpClient.PostAsJsonAsync("/api/v1/users", request);
+        
+        // Assert
+        response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
+        
+        var json = await response.Content.ReadFromJsonAsync<CreateUserBadRequest>();
+        json?.Message.Should().Be("Bad Request");
+        json?.Errors.Email.Should().Contain("Email is already in use.");
     }
 
     private class CreateUserBadRequest

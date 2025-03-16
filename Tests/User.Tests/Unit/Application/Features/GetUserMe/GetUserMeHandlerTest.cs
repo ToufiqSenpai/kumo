@@ -19,7 +19,9 @@ public class GetUserMeHandlerTest
     public async Task Handle_ShouldReturnUserDto()
     {
         // Arrange
-        var user = _fixture.Create<Domain.Entities.User>();
+        var user = _fixture.Build<Domain.Entities.User>()
+            .Without(u => u.RefreshTokens)
+            .Create();
         var userDto = new UserDto(user.Name, user.Email);
         var query = new GetUserMeQuery(user.Id);
         var getUserMeHandler = new GetUserMeHandler(_userRepositoryMock.Object, _mapperMock.Object);

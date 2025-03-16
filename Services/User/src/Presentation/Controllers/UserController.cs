@@ -1,7 +1,9 @@
 ﻿using System.Net;
+using FluentValidation;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Shared.Common.Exceptions;
+using Shared.Common.Filters;
 using User.Application.Features.CreateUser;
 using User.Application.Features.GetUserMe;
 using User.Application.Features.LoginUser;
@@ -15,14 +17,25 @@ namespace User.Presentation.Controllers;
 public class UserController(IMediator mediator) : ControllerBase
 {
     [HttpPost]
+    [ServiceFilter(typeof(ValidationFilter))]
     public async Task<IActionResult> CreateUser([FromBody] CreateUserRequestDto request, CancellationToken cancellationToken)
     {
         return Created(nameof(CreateUser), await mediator.Send(new CreateUserCommand(request), cancellationToken));
     }
     
     [HttpPost("login")]
-    public async Task<IActionResult> Login([FromBody] LoginUserRequestDto request, CancellationToken cancellationToken)
+    public async Task<IActionResult> Login(
+        [FromBody] LoginUserRequestDto request, 
+        [FromServices] IValidator<LoginUserRequestDto> validator,
+        CancellationToken cancellationToken)
     {
+        var result = await validator.ValidateAsync(request, cancellationToken);
+        
+        if (!result.IsValid)
+        {
+            throw new HttpResponseException(HttpStatusCode.Unauthorized, "Email or Password is invalid.");
+        }
+        
         return Ok(await mediator.Send(new LoginUserCommand(request), cancellationToken));
     }
     

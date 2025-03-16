@@ -4,6 +4,7 @@ using Microsoft.Extensions.Options;
 using User.Infrastructure.Options;
 using User.Application.Interfaces;
 using User.Application.Repositories;
+using User.Infrastructure.BackgroundServices;
 using User.Infrastructure.Persistence;
 using User.Infrastructure.Repositories;
 using User.Infrastructure.Security;
@@ -55,7 +56,7 @@ public static class ServiceExtensions
         // Add database context
         services.AddDbContext<UserDbContext>(options =>
         {
-         options.UseNpgsql(Environment.GetEnvironmentVariable("DATABASE_CONNECTION_STRING"));
+            options.UseNpgsql(configuration["Database:ConnectionString"]);
         });
         
         // Add repositories
@@ -80,5 +81,8 @@ public static class ServiceExtensions
                 cfg.ConfigureEndpoints(context);
             });
         });
+        
+        // Add background services
+        services.AddHostedService<RefreshTokenCleanupService>();
     }
 }

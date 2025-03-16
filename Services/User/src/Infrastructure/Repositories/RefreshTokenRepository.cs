@@ -22,12 +22,23 @@ public class RefreshTokenRepository(UserDbContext dbContext) : IRefreshTokenRepo
 
     public async Task DeleteByTokenAsync(string token, CancellationToken cancellationToken)
     {
-        var refreshToken = await dbContext.RefreshTokens.AnyAsync(x => x.Token == token, cancellationToken);
+        var refreshTokens = await dbContext.RefreshTokens
+            .Where(x => x.Token == token)
+            .ToListAsync(cancellationToken);
+        
+        dbContext.RefreshTokens.RemoveRange(refreshTokens);
+        
+        await dbContext.SaveChangesAsync(cancellationToken);
+    }
 
-        if (refreshToken)
-        {
-            dbContext.RefreshTokens.Remove(new RefreshToken { Token = token });
-            await dbContext.SaveChangesAsync(cancellationToken);
-        }
+    public async Task DeleteByExpiredTokensAsync(CancellationToken cancellationToken)
+    {
+        var expiredTokens =
+            from refreshToken in dbContext.RefreshTokens
+            where refreshToken.Expires <= DateTime.UtcNow
+            select refreshToken;
+        
+        dbContext.RefreshTokens.RemoveRange(expiredTokens);
+        await dbContext.SaveChangesAsync(cancellationToken);
     }
 }

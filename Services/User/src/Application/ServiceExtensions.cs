@@ -2,6 +2,7 @@
 using FluentValidation;
 using FluentValidation.AspNetCore;
 using User.Application.Features.CreateUser;
+using User.Application.Features.LoginUser;
 
 namespace User.Application;
 
@@ -14,6 +15,7 @@ public static class ServiceExtensions
 
         // Add validators
         services.AddValidatorsFromAssemblyContaining<CreateUserValidator>();
+        services.AddValidatorsFromAssemblyContaining<LoginUserValidator>();
         
         // Add mappers
         services.AddAutoMapper(Assembly.GetExecutingAssembly());
