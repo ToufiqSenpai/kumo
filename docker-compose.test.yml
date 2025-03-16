@@ -1,0 +1,29 @@
+version: '3.8'
+
+services:
+  user_database:
+    image: postgres:latest
+    container_name: user_database
+    environment:
+      - POSTGRES_USER=user_application
+      - POSTGRES_PASSWORD=user_service_application123
+      - POSTGRES_DB=user_db
+    ports:
+      - "5432:5432"
+    networks:
+      - kumo_network_test
+  
+  rabbitmq:
+    image: rabbitmq:latest
+    container_name: rabbitmq
+    environment:
+      - RABBITMQ_DEFAULT_USER=rabbitmq
+      - RABBITMQ_DEFAULT_PASS=rabbitmq_amqp
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    networks:
+      - kumo_network_test
+
+networks:
+  kumo_network_test:

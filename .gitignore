@@ -1,0 +1,45 @@
+﻿# Build output
+bin/
+obj/
+out/
+
+# User-specific files
+*.csproj.user
+*.suo
+*.user
+*.sln.docstates
+
+# Logs
+*.log
+
+# VS-specific
+.vs/
+.vscode/
+.idea/
+
+# NuGet packages
+packages/
+project.lock.json
+*.nuget.props
+*.nuget.targets
+
+# Environment files
+appsettings.Development.json
+appsettings.Local.json
+secrets.json
+.env
+
+# Temporary files
+*.tmp
+*.cache
+tmp/
+cache/
+
+# Publish output
+*.publish/
+*.db
+*.sqlite
+
+# OS-specific files
+Thumbs.db
+.DS_Store
