@@ -7,7 +7,7 @@ public enum SortBy
 {
     Name,
     Size,
-    LastModified,
+    LastModifiedAt,
     CreatedAt
 }
 
@@ -20,7 +20,7 @@ public class SortByConverter : JsonConverter<SortBy>
         {
             "name" => SortBy.Name,
             "size" => SortBy.Size,
-            "last_modified" => SortBy.LastModified,
+            "last_modified_at" => SortBy.LastModifiedAt,
             "created_at" => SortBy.CreatedAt,
             _ => throw new JsonException($"Invalid SortBy value: {value}")
         };

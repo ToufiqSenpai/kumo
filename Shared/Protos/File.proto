@@ -1,0 +1,47 @@
+﻿syntax = "proto3";
+
+option csharp_namespace = "GrpcService";
+
+service FileService {
+  rpc CreateUploadSession(CreateUploadSessionRequest) returns (CreateUploadSessionResponse);
+  rpc CopyFile(CopyFileRequest) returns (CopyFileResponse);
+  rpc DownloadFiles(DownloadFilesRequest) returns (DownloadFilesResponse);
+  rpc DeleteFile(DeleteFileRequest) returns (DeleteFileResponse);
+}
+
+message StringList {
+  repeated string values = 1;
+}
+
+message CreateUploadSessionRequest {
+  string fileId = 1;
+}
+
+message CreateUploadSessionResponse {
+  string uploadId = 1;
+  string expires = 2;
+}
+
+message CopyFileRequest {
+  map<string, string> files = 1;
+}
+
+message CopyFileResponse {
+  string processId = 1;
+}
+
+message DownloadFilesRequest {
+  map<string, StringList> files = 1;
+}
+
+message DownloadFilesResponse {
+  string downloadId = 1;
+}
+
+message DeleteFileRequest {
+  string fileId = 1;
+}
+
+message DeleteFileResponse {
+  
+}

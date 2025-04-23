@@ -2,4 +2,4 @@
 
 namespace Item.Application.Features.CreateRootFolder;
 
-public record CreateRootFolderCommand(Guid UserId) : IRequest<Unit>;
+public sealed record CreateRootFolderCommand(Guid UserId) : IRequest<Unit>;
