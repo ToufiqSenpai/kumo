@@ -1,9 +1,9 @@
 ﻿using System.Reflection;
+using File.Application.Interfaces;
+using File.Application.Services;
 using FluentValidation;
-using User.Application.Features.CreateUser;
-using User.Application.Features.LoginUser;
 
-namespace User.Application;
+namespace File.Application;
 
 public static class ServiceExtensions
 {
@@ -13,10 +13,11 @@ public static class ServiceExtensions
         services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly()));
 
         // Add validators
-        services.AddValidatorsFromAssemblyContaining<CreateUserValidator>();
-        services.AddValidatorsFromAssemblyContaining<LoginUserValidator>();
+        services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
         
         // Add mappers
         services.AddAutoMapper(Assembly.GetExecutingAssembly());
+
+        services.AddSingleton<IUploadSessionService, UploadSessionService>();
     }
 }

@@ -16,8 +16,6 @@ public static class ServiceExtensions
     public static void AddInfrastructure(this IServiceCollection services, IConfiguration configuration)
     {
         // Add options
-        Console.WriteLine(Environment.GetEnvironmentVariable("Rabbitmq__Uri"));
-        
         services.AddOptions<PasswordOptions>()
             .BindConfiguration(PasswordOptions.Password)
             .ValidateDataAnnotations()
